@@ -1,0 +1,21 @@
+<?php
+include 'connection/connect.php';
+$sql = mysqli_query($db,"SELECT COUNT(transfer_id) as count_regis FROM jvlmatrix_transfer where ISNULL(status)");
+                                    $result = mysqli_fetch_assoc($sql);
+                                    echo mysqli_error($db);
+                                ?>
+<a href="JavaScript:doCallAjax('count_regis')" class="dropdown-toggle" data-toggle="dropdown"><img src='images/Bell.ico' width='18'> รายการแจ้งย้าย  
+<span class="badge_alert" ><?php echo $result['count_regis']; ?></span><b class="caret"></b></a>
+
+<ul class="dropdown-menu">
+                                            <?php
+                                            $sql2 = mysqli_query($db,"select c.name  AS detail,t.hn,t.an  from jvlmatrix_transfer t
+                                                            inner join clinic c on c.clinic=t.clinic
+                                                        WHERE ISNULL(t.status) GROUP BY t.transfer_id order by t.transfer_id DESC");
+                                            while ($result2 = mysqli_fetch_assoc($sql2)) {
+                                                ?>
+                                                <li><a href="detial_transfer.php?hn=<?= $result2['hn']?>&an=<?= $result2['an']?>"><img src="images/Old_Iron_Man_Mask.ico" width="30"> <?php echo $result2['detail']; ?> </a></li>
+                                            <?php } ?>
+                                            <li class="divider"></li>
+                                            <li><a href="changeRisk.php">ดูทั้งหมด</a></li>
+                                        </ul>
